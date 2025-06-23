@@ -7,27 +7,19 @@ This README provides step-by-step instructions and context for the install_lokis
 Before running the script, ensure the following tools are installed and accessible in your terminal session:
 
 oc (OpenShift CLI)
-
 rosa (ROSA CLI)
-
 aws CLI (configured with appropriate permissions)
-
 jq
 
 🔐 Required AWS Permissions
 
 The script creates and manages AWS resources:
-
 S3 bucket
-
 IAM policy
-
 IAM role
 
 Your AWS credentials must have permissions to:
-
 s3:* on the specified bucket
-
 iam:CreateRole, iam:CreatePolicy, iam:AttachRolePolicy
 
 🧾 Input Requirements
@@ -35,15 +27,12 @@ iam:CreateRole, iam:CreatePolicy, iam:AttachRolePolicy
 Interactive Prompts:
 
 The script will prompt for the following:
-
 AWS Access Key ID
-
 AWS Secret Access Key
 
 These are used to create a Kubernetes secret for Loki to access the S3 bucket.
 
 Alternatively, you can set them as environment variables before running:
-
 export AWS_ACCESS_KEY_ID=... export AWS_SECRET_ACCESS_KEY=...
 
 🏗️ Script Workflow
@@ -103,30 +92,27 @@ Ensures Cluster Observability Operator is installed
 🧪 Validation Checklist
 
 After running the script:
-
 Go to Observe → Logs tab in OpenShift console
-
 Logs should appear from application and infrastructure sources
 
 Run a test pod to generate logs:
-
-oc new-project test-logs oc run loggen --image=busybox --restart=Never -- /bin/sh -c 'while true; do echo "hello $(date)"; sleep 3; done'
+./02_generate_sample_logs.sh 
 
 🧯 Troubleshooting
 
 Logs Not Showing?
-
 Check if ClusterLogForwarder and LokiStack are Ready
 
 IAM Issues?
-
 Ensure the OIDC provider in your trust policy matches your OpenShift config
-
 Run aws sts get-caller-identity to validate credentials
 
 📘 Useful Commands
 
-oc get pods -n openshift-logging oc get lokistack -n openshift-logging oc get clusterlogforwarder -n openshift-logging aws iam list-roles | grep lokistack
+oc get pods -n openshift-logging 
+oc get lokistack -n openshift-logging 
+oc get clusterlogforwarder -n openshift-logging 
+aws iam list-roles | grep lokistack
 
 📄 License
 
